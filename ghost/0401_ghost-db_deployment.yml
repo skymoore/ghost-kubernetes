@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ghost
+  name: ghost-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ghost-db
+  template:
+    metadata:
+      labels:
+        app: ghost-db
+    spec:
+      hostname: ghost-db
+      volumes:
+        - name: database-ebs
+          persistentVolumeClaim:
+            claimName: ghost-db-claim
+      initContainers:
+        - name: volume-dirs-init-cntr
+          image: busybox:1.35
+          command:
+            - "/bin/mkdir"
+          args:
+            - "-p"
+            - "/db/data"
+          volumeMounts:
+            - name: database-ebs
+              mountPath: "/db"
+      containers:
+        - name: ghost-db
+          image: mysql:8
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: db-pass
+                  optional: false
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: db-user
+                  optional: false
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: db-pass
+                  optional: false
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: db-name
+                  optional: false
+          ports:
+            - name: pod-db-port
+              containerPort: 3306
+              protocol: TCP
+          volumeMounts:
+            - name: database-ebs
+              mountPath: /var/lib/mysql
+              subPath: data

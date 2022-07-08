@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost
+  namespace: ghost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "ghost"
+  template:
+    metadata:
+      namespace: ghost
+      labels:
+        app: ghost
+    spec:
+      hostname: ghost
+      volumes:
+        - name: ghost-ebs
+          persistentVolumeClaim:
+            claimName: ghost-data-claim
+      initContainers:
+        - name: init-database
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup ghost-db.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+
+      containers:
+        - name: ghost
+          image: ghost:5-alpine
+          imagePullPolicy: Always
+          env:
+            # DATABASE
+            - name: database__client
+              value: mysql
+            - name: database__connection__host
+              value: ghost-db
+            - name: database__connection__database
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: db-name
+                  optional: false
+            - name: database__connection__user
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: db-user
+                  optional: false
+            - name: database__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: db-pass
+                  optional: false
+            # GHOST
+            - name: url
+              value: https://skymoore.com
+            # MAILGUN
+            - name: mail__transport
+              value: SMTP
+            - name: mail__options__service
+              value: Mailgun
+            - name: mail__options__auth__user
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: mail-user
+                  optional: false
+            - name: mail__options__auth__pass
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: mail-pass
+                  optional: false
+
+          ports:
+            - name: pod-ghost-port
+              containerPort: 2368
+              protocol: TCP
+
+          volumeMounts:
+            - name: ghost-ebs
+              mountPath: /var/lib/ghost/content

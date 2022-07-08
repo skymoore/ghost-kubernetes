@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ghost
+  name: ghost-db
+  labels:
+    app: db-service
+spec:
+  type: ClusterIP
+  selector:
+    app: ghost-db
+  ports:
+  - name: db-port
+    protocol:  TCP
+    port: 3306
+    targetPort: pod-db-port

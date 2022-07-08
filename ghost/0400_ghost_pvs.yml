@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ghost-db-claim
+  namespace: ghost
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ghost-storage-class
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ghost-data-claim
+  namespace: ghost
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ghost-storage-class
+  resources:
+    requests:
+      storage: 10Gi
