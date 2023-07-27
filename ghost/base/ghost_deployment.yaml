@@ -3,38 +3,36 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ghost
-  namespace: ghost
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "ghost"
+      app: ghost
   template:
     metadata:
-      namespace: ghost
       labels:
         app: ghost
     spec:
       hostname: ghost
       volumes:
-        - name: ghost-ebs
+        - name: ghost-data
           persistentVolumeClaim:
             claimName: ghost-data-claim
+
       initContainers:
         - name: init-database
           image: busybox:1.28
-          command: ['sh', '-c', "until nslookup ghost-db.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+          command: ['sh', '-c', "until nslookup ghost-db.ghost.svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
 
       containers:
         - name: ghost
-          image: ghost:5-alpine
+          image: ghost-image
           imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: ghost-config
           env:
             # DATABASE
-            - name: database__client
-              value: mysql
-            - name: database__connection__host
-              value: ghost-db
             - name: database__connection__database
               valueFrom:
                 secretKeyRef:
@@ -53,14 +51,7 @@ spec:
                   name: ghost-secrets
                   key: db-pass
                   optional: false
-            # GHOST
-            - name: url
-              value: https://skymoore.com
             # MAILGUN
-            - name: mail__transport
-              value: SMTP
-            - name: mail__options__service
-              value: Mailgun
             - name: mail__options__auth__user
               valueFrom:
                 secretKeyRef:
@@ -80,5 +71,5 @@ spec:
               protocol: TCP
 
           volumeMounts:
-            - name: ghost-ebs
+            - name: ghost-data
               mountPath: /var/lib/ghost/content

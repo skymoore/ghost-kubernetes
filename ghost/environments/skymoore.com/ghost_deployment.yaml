@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost
+spec:
+  replicas: 1
+  template:
+    spec:
+      hostname: ghost
+      serviceAccountName: ghost
+      volumes:
+        - name: ghost-data
+          persistentVolumeClaim:
+            claimName: ghost-data-claim
+        - name: ghost-secrets
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: ghost-secrets
+      containers:
+        - name: ghost
+          volumeMounts:
+            - name: ghost-data
+              mountPath: /var/lib/ghost/content
+            - name: ghost-secrets
+              mountPath: /mnt/vault-secrets-store
+              readOnly: true

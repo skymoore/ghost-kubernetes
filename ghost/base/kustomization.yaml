@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ghost
+
+resources:
+  - namespace.yaml
+  - db_deployment.yaml
+  - db_service.yaml
+  - ghost_deployment.yaml
+  - ghost_service.yaml
+  - storage_class.yaml
+  - pvcs.yaml
+
+images:
+  - name: ghost-image
+    newName: ghost
+    newTag: 5-alpine
+  - name: db-image
+    newName: mysql
+    newTag: "8"
+
+configMapGenerator:
+  - name: ghost-config
+    envs:
+      - "config/ghost.env"
+
+secretGenerator:
+  - name: ghost-secrets
+    envs:
+      - "config/ghost-secrets.env"

@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ghost
+
+resources:
+  - ../../base
+  - ingress.yaml
+  - serviceaccount.yaml
+  - secrets.yaml
+
+patches:
+  - patch: |-
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: ghost-secrets
+      $patch: delete
+  - path: storage_class.yaml
+  - path: db_deployment.yaml
+  - path: ghost_deployment.yaml
+
+images:
+  - name: ghost-image
+    newName: ghost
+    newTag: 5-alpine
+  - name: db-image
+    newName: mysql
+    newTag: "8"
+
+configMapGenerator:
+  - name: ghost-config
+    behavior: merge
+    envs:
+      - "config/ghost.env"

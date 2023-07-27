@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost-db
+spec:
+  template:
+    spec:
+      serviceAccountName: ghost
+      hostname: ghost-db
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: ghost-db-claim
+        - name: ghost-secrets
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: ghost-secrets
+      containers:
+        - name: ghost-db
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/mysql
+              subPath: data
+            - name: ghost-secrets
+              mountPath: /mnt/vault-secrets-store
+              readOnly: true

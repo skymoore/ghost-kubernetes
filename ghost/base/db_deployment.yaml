@@ -2,10 +2,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: ghost
   name: ghost-db
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: ghost-db
@@ -16,7 +14,7 @@ spec:
     spec:
       hostname: ghost-db
       volumes:
-        - name: database-ebs
+        - name: db-data
           persistentVolumeClaim:
             claimName: ghost-db-claim
       initContainers:
@@ -28,11 +26,11 @@ spec:
             - "-p"
             - "/db/data"
           volumeMounts:
-            - name: database-ebs
+            - name: db-data
               mountPath: "/db"
       containers:
         - name: ghost-db
-          image: mysql:8
+          image: db-image
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -63,6 +61,6 @@ spec:
               containerPort: 3306
               protocol: TCP
           volumeMounts:
-            - name: database-ebs
+            - name: db-data
               mountPath: /var/lib/mysql
               subPath: data
