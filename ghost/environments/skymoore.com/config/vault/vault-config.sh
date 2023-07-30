@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export VAULT_ADDR="https://vlt.yrl.ink"
+export VAULT_ADDR="https://vlt.rwx.dev"
 
 vault policy write ghost - <<EOF
 path "secrets/data/ghost" {
