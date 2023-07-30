@@ -7,6 +7,6 @@ spec:
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
-  commonName: 'skymoore.yrl.ink'
+  commonName: 'skymoore.com'
   dnsNames:
-  - 'skymoore.yrl.ink'
+  - 'skymoore.com'

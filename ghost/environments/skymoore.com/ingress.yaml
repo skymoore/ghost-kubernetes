@@ -11,10 +11,10 @@ spec:
 
   tls:
     - hosts:
-      - skymoore.yrl.ink
+      - skymoore.com
       secretName: tls-cert
   rules:
-    - host: "skymoore.yrl.ink"
+    - host: "skymoore.com"
       http:
         paths:
         - path: /
