@@ -1,7 +1,6 @@
 #!/bin/bash
 
-export VAULT_ADDR="https://vlt.rwx.dev"
-export VAULT_TOKEN=""
+export VAULT_ADDR="https://vlt.yrl.ink"
 
 vault policy write ghost - <<EOF
 path "secrets/data/ghost" {
@@ -9,7 +8,7 @@ path "secrets/data/ghost" {
 }
 EOF
 
-vault write auth/sky-dev/role/ghost \
+vault write auth/k8s-skydive/role/ghost \
     bound_service_account_names=ghost \
     bound_service_account_namespaces=ghost \
     policies=ghost \

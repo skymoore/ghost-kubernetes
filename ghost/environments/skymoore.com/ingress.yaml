@@ -5,31 +5,18 @@ metadata:
   name: ghost-ingress
   namespace: ghost
   annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:585441654511:certificate/346adc92-4aa7-4c13-9aaa-420ee0247f3b
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/load-balancer-attributes: routing.http2.enabled=true,idle_timeout.timeout_seconds=600
-    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=60
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
-    alb.ingress.kubernetes.io/group.name: sky-dev-ingress
-    alb.ingress.kubernetes.io/group.order: '6'
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-  ingressClassName: alb
+
   tls:
     - hosts:
-        - skymoore.com
+      - skymoore.yrl.ink
+      secretName: tls-cert
   rules:
-    - host: "skymoore.com"
+    - host: "skymoore.yrl.ink"
       http:
         paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: ssl-redirect
-              port: 
-                name: use-annotation
         - path: /
           pathType: Prefix
           backend:

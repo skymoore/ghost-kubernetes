@@ -4,10 +4,8 @@ kind: StorageClass
 metadata:
   name: ghost-storage-class
   namespace: ghost
-provisioner: ebs.csi.aws.com
+provisioner: kubernetes.io/gce-pd
 parameters:
-  type: gp3
-  fsType: ext4
-  encrypted: "true"
+  type: pd-standard
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Retain
