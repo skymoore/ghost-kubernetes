@@ -4,26 +4,34 @@ kind: Deployment
 metadata:
   name: ghost
 spec:
-  replicas: 1
+  replicas: 3
   template:
+    metadata:
+      annotations:
+        gke-gcsfuse/volumes: "true"
     spec:
+      # nodeSelector:
+      #   pool: secondary
       hostname: ghost
       serviceAccountName: ghost
+      securityContext:
+        runAsUser: 1000
       volumes:
-        - name: ghost-data
-          persistentVolumeClaim:
-            claimName: ghost-data-claim
         - name: ghost-secrets
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
               secretProviderClass: ghost-secrets
+        - name: gcs-ghost-data
+          persistentVolumeClaim:
+            claimName: gcs-ghost-data
       containers:
         - name: ghost
           volumeMounts:
-            - name: ghost-data
-              mountPath: /var/lib/ghost/content
             - name: ghost-secrets
               mountPath: /mnt/vault-secrets-store
               readOnly: true
+            - mountPath: /var/lib/ghost/content
+              name: gcs-ghost-data
+            

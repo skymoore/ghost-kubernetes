@@ -9,7 +9,6 @@ resources:
   - db_service.yaml
   - ghost_deployment.yaml
   - ghost_service.yaml
-  - storage_class.yaml
   - pvcs.yaml
 
 images:

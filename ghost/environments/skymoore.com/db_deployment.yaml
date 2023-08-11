@@ -6,6 +6,8 @@ metadata:
 spec:
   template:
     spec:
+      # nodeSelector:
+      #   pool: secondary
       serviceAccountName: ghost
       hostname: ghost-db
       volumes:

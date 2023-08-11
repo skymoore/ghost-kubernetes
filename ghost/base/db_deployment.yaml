@@ -4,13 +4,7 @@ kind: Deployment
 metadata:
   name: ghost-db
 spec:
-  selector:
-    matchLabels:
-      app: ghost-db
   template:
-    metadata:
-      labels:
-        app: ghost-db
     spec:
       hostname: ghost-db
       volumes:

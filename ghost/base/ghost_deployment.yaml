@@ -5,13 +5,7 @@ metadata:
   name: ghost
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: ghost
   template:
-    metadata:
-      labels:
-        app: ghost
     spec:
       hostname: ghost
       volumes:
@@ -22,7 +16,7 @@ spec:
       initContainers:
         - name: init-database
           image: busybox:1.28
-          command: ['sh', '-c', "until nslookup ghost-db.ghost.svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+          command: ['sh', '-c', "until nslookup ghost-db.skymoore-com.svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
 
       containers:
         - name: ghost

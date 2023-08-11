@@ -10,7 +10,7 @@ EOF
 
 vault write auth/k8s-skydive/role/ghost \
     bound_service_account_names=ghost \
-    bound_service_account_namespaces=ghost \
+    bound_service_account_namespaces=skymoore-com \
     policies=ghost \
     ttl=24h
 
