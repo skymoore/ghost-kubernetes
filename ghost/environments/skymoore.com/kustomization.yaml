@@ -14,7 +14,6 @@ resources:
   - ingress.yaml
   - serviceaccount.yaml
   - secrets.yaml
-  - ghost-db-pv.yaml
   - gcs-pv.yml
   - gcs-pvc.yml
 
@@ -25,17 +24,12 @@ patches:
       metadata:
         name: ghost-secrets
       $patch: delete
-  - path: ghost-db-pvc.yaml
-  - path: db_deployment.yaml
   - path: ghost_deployment.yaml
 
 images:
   - name: ghost-image
     newName: ghost
     newTag: 5-alpine
-  - name: db-image
-    newName: mysql
-    newTag: "8"
 
 configMapGenerator:
   - name: ghost-config

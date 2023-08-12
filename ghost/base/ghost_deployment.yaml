@@ -7,13 +7,7 @@ spec:
   replicas: 1
   template:
     spec:
-      hostname: ghost
-
-      initContainers:
-        - name: init-database
-          image: busybox:1.28
-          command: ['sh', '-c', "until nslookup ghost-db.skymoore-com.svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
-
+      hostname: ghost 
       containers:
         - name: ghost
           image: ghost-image
