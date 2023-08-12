@@ -5,11 +5,11 @@ namespace: ghost
 
 resources:
   - namespace.yaml
+  - ghost-db-pvc.yaml
   - db_deployment.yaml
   - db_service.yaml
   - ghost_deployment.yaml
   - ghost_service.yaml
-  - pvcs.yaml
 
 images:
   - name: ghost-image

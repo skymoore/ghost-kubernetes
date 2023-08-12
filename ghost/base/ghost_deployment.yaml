@@ -8,10 +8,6 @@ spec:
   template:
     spec:
       hostname: ghost
-      volumes:
-        - name: ghost-data
-          persistentVolumeClaim:
-            claimName: ghost-data-claim
 
       initContainers:
         - name: init-database
@@ -63,7 +59,3 @@ spec:
             - name: pod-ghost-port
               containerPort: 2368
               protocol: TCP
-
-          volumeMounts:
-            - name: ghost-data
-              mountPath: /var/lib/ghost/content

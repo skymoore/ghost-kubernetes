@@ -14,7 +14,7 @@ resources:
   - ingress.yaml
   - serviceaccount.yaml
   - secrets.yaml
-  - pvcs.yaml
+  - ghost-db-pv.yaml
   - gcs-pv.yml
   - gcs-pvc.yml
 
@@ -25,6 +25,7 @@ patches:
       metadata:
         name: ghost-secrets
       $patch: delete
+  - path: ghost-db-pvc.yaml
   - path: db_deployment.yaml
   - path: ghost_deployment.yaml
 
