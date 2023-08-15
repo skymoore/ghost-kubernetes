@@ -14,8 +14,8 @@ resources:
   - ingress.yaml
   - serviceaccount.yaml
   - secrets.yaml
-  - gcs-pv.yml
-  - gcs-pvc.yml
+  - gcs-pv.yaml
+  - gcs-pvc.yaml
 
 patches:
   - patch: |-
@@ -24,7 +24,7 @@ patches:
       metadata:
         name: ghost-secrets
       $patch: delete
-  - path: ghost_deployment.yaml
+  - path: ghost-statefulset.yaml
 
 images:
   - name: ghost-image

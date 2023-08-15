@@ -5,6 +5,7 @@ metadata:
   name: ghost-ingress
   namespace: ghost
   annotations:
+    external-dns.alpha.kubernetes.io/hostname: "skymoore.com"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/affinity: cookie
     nginx.ingress.kubernetes.io/affinity-mode: persistent

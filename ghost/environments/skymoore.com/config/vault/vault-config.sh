@@ -8,7 +8,7 @@ path "secrets/data/ghost" {
 }
 EOF
 
-vault write auth/k8s-skydive/role/ghost \
+vault write auth/k8s-rwxdev/role/ghost \
     bound_service_account_names=ghost \
     bound_service_account_namespaces=skymoore-com \
     policies=ghost \

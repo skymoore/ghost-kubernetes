@@ -5,8 +5,8 @@ namespace: ghost
 
 resources:
   - namespace.yaml
-  - ghost_deployment.yaml
-  - ghost_service.yaml
+  - ghost-statefulset.yaml
+  - ghost-service.yaml
 
 images:
   - name: ghost-image
