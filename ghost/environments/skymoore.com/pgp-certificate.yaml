@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pgp-skymoore-com
+spec:
+  secretName: pgp-tls-cert
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: 'pgp.skymoore.com'
+  dnsNames:
+  - 'pgp.skymoore.com'

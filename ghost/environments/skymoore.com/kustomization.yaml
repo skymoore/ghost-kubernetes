@@ -16,6 +16,8 @@ resources:
   - secrets.yaml
   - gcs-pv.yaml
   - gcs-pvc.yaml
+  - pgp-certificate.yaml
+  - pgp-ingress.yaml
 
 patches:
   - patch: |-
